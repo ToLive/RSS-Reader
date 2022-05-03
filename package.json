@@ -7,7 +7,7 @@
     "testEnvironment": "node",
     "transform": {}
   },
-  "private": true,
+  "main": "src/init.js",
   "scripts": {
     "test": "jest --colors --runInBand --bail"
   },
