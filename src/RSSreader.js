@@ -1,6 +1,6 @@
 // @ts-check
 
-export default class Example {
+export default class RSSreader {
   constructor(element) {
     this.element = element;
   }

@@ -1,9 +1,7 @@
-// @ts-check
-
-import Example from './Example.js';
+import RSSreader from './RSSreader.js';
 
 export default () => {
   const element = document.getElementById('point');
-  const obj = new Example(element);
+  const obj = new RSSreader(element);
   obj.init();
 };
