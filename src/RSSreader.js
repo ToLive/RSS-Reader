@@ -1,5 +1,3 @@
-// @ts-check
-
 export default class RSSreader {
   constructor(element) {
     this.element = element;
