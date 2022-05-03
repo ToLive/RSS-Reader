@@ -4,10 +4,11 @@
   "description": "[![Actions Status](https://github.com/ToLive/frontend-project-lvl3/workflows/hexlet-check/badge.svg)](https://github.com/ToLive/frontend-project-lvl3/actions)",
   "type": "module",
   "jest": {
-    "testEnvironment": "node",
-    "transform": {}
+    "verbose": true,
+    "testURL": "http://localhost/",
+    "testEnvironment": "jsdom"
   },
-  "main": "src/index.js",
+  "main": "src/init.js",
   "scripts": {
     "test": "jest --colors --runInBand --bail"
   },
@@ -22,9 +23,10 @@
   },
   "homepage": "https://github.com/ToLive/frontend-project-lvl3#readme",
   "dependencies": {
+    "npm-check-updates": "^11.8.5",
     "bootstrap": "^5.1.3",
-    "is-plain-object": "^5.0.0",
-    "js-yaml": "^4.0.0",
+    "sass": "^1.39.0",
+    "sass-loader": "^12.1.0",
     "lodash": "^4.17.20"
   },
   "devDependencies": {
