@@ -1,10 +1,8 @@
 export default class RSSreader {
-  constructor(element) {
-    this.element = element;
+  constructor() {
   }
 
   init() {
-    this.element.textContent = 'hello, world!';
     console.log('ehu!');
   }
 }
