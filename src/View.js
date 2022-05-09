@@ -1,7 +1,7 @@
 import onChange from 'on-change';
 import _ from 'lodash';
 
-export default (elements) => {
+export default (elementsToRender) => {
   const renderErrors = (elements, errors, prevErrors) => {
     Object.entries(elements.fields).forEach(([fieldName, fieldElement]) => {
       const error = errors[fieldName];
@@ -9,40 +9,38 @@ export default (elements) => {
       const fieldHadError = _.has(prevErrors, fieldName);
       const fieldHasError = _.has(errors, fieldName);
 
+      const feedbackElement = document.querySelector('.feedback');
+
       if (!fieldHadError && !fieldHasError) {
         return;
       }
-  
+
       if (fieldHadError && !fieldHasError) {
         fieldElement.classList.remove('is-invalid');
-        fieldElement.nextElementSibling.remove();
+        feedbackElement.textContent = '';
         return;
       }
-  
+
       if (fieldHadError && fieldHasError) {
-        const feedbackElement = fieldElement.nextElementSibling;
         feedbackElement.textContent = error.message;
         return;
       }
 
       fieldElement.classList.add('is-invalid');
-      const feedbackElement = document.createElement('div');
-      feedbackElement.classList.add('invalid-feedback');
+
       feedbackElement.textContent = error.message;
-      fieldElement.after(feedbackElement);
     });
   };
-    
+
   const render = (elements) => (path, value, prevValue) => {
     switch (path) {
       case 'form.valid':
-        elements.submitButton.disabled = !value;
         break;
-  
+
       case 'form.errors':
         renderErrors(elements, value, prevValue);
         break;
-  
+
       default:
         break;
     }
@@ -58,7 +56,7 @@ export default (elements) => {
         urlInput: '',
       },
     },
-  }, render(elements));
+  }, render(elementsToRender));
 
   return state;
 };
