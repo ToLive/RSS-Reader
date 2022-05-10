@@ -1,7 +1,7 @@
 import onChange from 'on-change';
 import _ from 'lodash';
 
-export default (elementsToRender) => {
+export default (elementsToRender, i18nInstance) => {
   const renderErrors = (elements, errors, prevErrors) => {
     Object.entries(elements.fields).forEach(([fieldName, fieldElement]) => {
       const error = errors[fieldName];
@@ -32,8 +32,21 @@ export default (elementsToRender) => {
     });
   };
 
+  const handleLanguageChange = () => {
+    document.querySelector('.lead').textContent = i18nInstance.t('labels.subtitle');
+    document.querySelector('h1').textContent = i18nInstance.t('labels.title');
+    document.querySelector('[type="submit"]').textContent = i18nInstance.t('buttons.submit');
+    document.getElementById('url-input').placeholder = i18nInstance.t('formElements.urlInputPlaceholder');
+    document.querySelector('label[for="url-input"]').textContent = i18nInstance.t('formElements.urlInputPlaceholder');
+    document.querySelector('#example-url').textContent = i18nInstance.t('labels.example');
+  };
+
   const render = (elements) => (path, value, prevValue) => {
     switch (path) {
+      case 'language':
+        i18nInstance.changeLanguage(value).then(() => handleLanguageChange());
+        break;
+
       case 'form.valid':
         break;
 
@@ -46,7 +59,8 @@ export default (elementsToRender) => {
     }
   };
 
-  const state = onChange({
+  const watchedState = onChange({
+    language: '',
     form: {
       valid: true,
       processState: 'filling',
@@ -58,5 +72,5 @@ export default (elementsToRender) => {
     },
   }, render(elementsToRender));
 
-  return state;
+  return watchedState;
 };

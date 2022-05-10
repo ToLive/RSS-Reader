@@ -1,8 +1,29 @@
 import * as yup from 'yup';
 import _ from 'lodash';
+import i18next from 'i18next';
 import View from './View.js';
+import resources from './locales/index.js';
 
 export default () => {
+  const defaultLanguage = 'ru';
+  const i18nInstance = i18next.createInstance();
+
+  i18nInstance.init({
+    lng: defaultLanguage,
+    debug: false,
+    resources,
+  });
+
+  yup.setLocale({
+    mixed: {
+      default: 'yup.field_invalid',
+    },
+    string: {
+      url: () => ({ key: 'yup.field_not_url' }),
+      required: () => ({ key: 'yup.field_required' }),
+    },
+  });
+
   const schema = yup.object().shape({
     urlInput: yup.string().required().url(),
   });
@@ -15,7 +36,8 @@ export default () => {
     submitButton: document.querySelector('button[type="submit"]'),
   };
 
-  const viewState = View(elements);
+  const viewState = View(elements, i18nInstance);
+  viewState.language = defaultLanguage;
 
   const validate = (fields) => schema.validate(fields, { abortEarly: false });
 
@@ -31,7 +53,17 @@ export default () => {
           viewState.form.valid = true;
         })
         .catch((error) => {
-          viewState.form.errors = _.keyBy(error.inner, 'path');
+          const newError = error;
+
+          newError.inner = error.inner.map((err) => {
+            const newErr = err;
+
+            newErr.errors = err.errors.map((item) => i18nInstance.t(item.key));
+            newErr.message = i18nInstance.t(err.errors[0]);
+            return newErr;
+          });
+
+          viewState.form.errors = _.keyBy(newError.inner, 'path');
           viewState.form.valid = false;
         });
     });

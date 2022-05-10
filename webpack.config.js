@@ -6,7 +6,7 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        use: ["source-map-loader"],
+        use: ['source-map-loader'],
       },
       { test: /\.css$/, use: ['style-loader', 'css-loader', 'postcss-loader'] },
       {
@@ -26,6 +26,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: 'index.html',
+      favicon: 'favicon.ico',
     }),
   ],
 };
