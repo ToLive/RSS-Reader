@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"typescript.check.npmIsInstalled": false,
+		"javascript.validate.enable": false
+	}
+}

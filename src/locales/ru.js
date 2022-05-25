@@ -7,7 +7,7 @@ export default {
     labels: {
       title: 'RSS агрегатор',
       subtitle: 'Начните читать RSS сегодня! Это легко, это красиво.',
-      example: 'Пример: https://ru.hexlet.io/lessons.rss',
+      example: 'Пример: https://www.exler.ru/blog/rss.xml',
     },
     formElements: {
       urlInputPlaceholder: 'Ссылка RSS',

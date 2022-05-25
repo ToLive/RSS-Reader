@@ -7,7 +7,7 @@ export default {
     labels: {
       title: 'RSS aggregator',
       subtitle: 'Start reading RSS today! It\'s easy, it\'s nicely.',
-      example: 'Example: https://ru.hexlet.io/lessons.rss',
+      example: 'Example: https://www.exler.ru/blog/rss.xml',
     },
     formElements: {
       urlInputPlaceholder: 'RSS URL',

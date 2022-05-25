@@ -1,7 +1,7 @@
-import onChange from 'on-change';
 import _ from 'lodash';
 
-export default (elementsToRender, i18nInstance) => {
+export default (i18nInstance) => {
+  console.log('in view');
   const renderErrors = (elements, errors, prevErrors) => {
     Object.entries(elements.fields).forEach(([fieldName, fieldElement]) => {
       const error = errors[fieldName];
@@ -41,10 +41,49 @@ export default (elementsToRender, i18nInstance) => {
     document.querySelector('#example-url').textContent = i18nInstance.t('labels.example');
   };
 
+  const handleProcessState = (elements, processState) => {
+    switch (processState) {
+      case 'sent':
+        console.log('Process requestsent');
+        elements.submitButton.disabled = false;
+
+        break;
+
+      case 'error':
+        elements.submitButton.disabled = false;
+        break;
+
+      case 'sending':
+        elements.submitButton.disabled = true;
+        break;
+
+      case 'filling':
+        elements.submitButton.disabled = false;
+        break;
+
+      default:
+        // https://ru.hexlet.io/blog/posts/sovershennyy-kod-defolty-v-svitchah
+        throw new Error(`Unknown process state: ${processState}`);
+    }
+  };
+
+  const handleProcessError = () => {
+    console.log('network error');
+  };
+
   const render = (elements) => (path, value, prevValue) => {
+    console.log('in render!');
     switch (path) {
       case 'language':
         i18nInstance.changeLanguage(value).then(() => handleLanguageChange());
+        break;
+
+      case 'form.processState':
+        handleProcessState(elements, value);
+        break;
+
+      case 'form.processError':
+        handleProcessError();
         break;
 
       case 'form.valid':
@@ -59,18 +98,5 @@ export default (elementsToRender, i18nInstance) => {
     }
   };
 
-  const watchedState = onChange({
-    language: '',
-    form: {
-      valid: true,
-      processState: 'filling',
-      processError: null,
-      errors: {},
-      fields: {
-        urlInput: '',
-      },
-    },
-  }, render(elementsToRender));
-
-  return watchedState;
+  return render;
 };

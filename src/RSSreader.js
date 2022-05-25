@@ -1,8 +1,11 @@
 import * as yup from 'yup';
 import _ from 'lodash';
 import i18next from 'i18next';
-import View from './View.js';
+import axios from 'axios';
+import onChange from 'on-change';
 import resources from './locales/index.js';
+import rssParser from './RSSparser.js'
+import view from './View.js';
 
 export default () => {
   const defaultLanguage = 'ru';
@@ -36,39 +39,103 @@ export default () => {
     submitButton: document.querySelector('button[type="submit"]'),
   };
 
-  const viewState = View(elements, i18nInstance);
-  viewState.language = defaultLanguage;
+  const errorMessages = {
+    network: {
+      error: 'Network Problems. Try again.',
+    },
+  };
 
-  const validate = (fields) => schema.validate(fields, { abortEarly: false });
+  const render = view(i18nInstance);
+
+  //console.log(render);
+  const watchedState = onChange({
+    language: '',
+    data: {},
+    form: {
+      valid: true,
+      processState: 'filling',
+      processError: null,
+      errors: {},
+      fields: {
+        urlInput: '',
+      },
+    },
+  }, render(elements));
+
+  watchedState.language = defaultLanguage;
+
+  const xmlParser = (xmlDocument, type) => {
+    const domParser = new DOMParser();
+
+    return domParser.parseFromString(xmlDocument, type);
+  };
+
+  const validateFields = () => new Promise((resolve, reject) => {
+    schema.validate(watchedState.form.fields, { abortEarly: false })
+      .then(() => {
+        watchedState.form.errors = { };
+        watchedState.form.valid = true;
+        resolve('validate was successful!');
+      })
+      .catch((error) => {
+        const newError = error;
+
+        newError.inner = error.inner.map((err) => {
+          const newErr = err;
+
+          newErr.errors = err.errors.map((item) => i18nInstance.t(item.key));
+          newErr.message = i18nInstance.t(err.errors[0]);
+          return newErr;
+        });
+
+        watchedState.form.errors = _.keyBy(newError.inner, 'path');
+        watchedState.form.valid = false;
+
+        reject();
+      });
+  });
 
   elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
 
+    watchedState.form.processState = 'sending';
+    watchedState.form.processError = null;
+
     Object.entries(elements.fields).forEach(([fieldName, fieldElement]) => {
       const { value } = fieldElement;
-      viewState.form.fields[fieldName] = value;
-      validate(viewState.form.fields)
-        .then(() => {
-          viewState.form.errors = { };
-          viewState.form.valid = true;
-        })
-        .catch((error) => {
-          const newError = error;
-
-          newError.inner = error.inner.map((err) => {
-            const newErr = err;
-
-            newErr.errors = err.errors.map((item) => i18nInstance.t(item.key));
-            newErr.message = i18nInstance.t(err.errors[0]);
-            return newErr;
-          });
-
-          viewState.form.errors = _.keyBy(newError.inner, 'path');
-          viewState.form.valid = false;
-        });
+      watchedState.form.fields[fieldName] = value;
     });
 
-    viewState.form.processState = 'sending';
-    viewState.form.processError = null;
+    validateFields()
+      .then(() => {
+        console.log('validate was successful!');
+
+        watchedState.form.processState = 'sending';
+
+        console.log(watchedState.form.fields.urlInput);
+
+        axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(watchedState.form.fields.urlInput)}`)
+          .then(response => response.data.contents)
+          .then(str => xmlParser(str, "text/xml"))
+          .then(data => rssParser(data))
+          .then(parsedData => {
+            console.log(parsedData);
+            watchedState.data.channels = parsedData.channel;
+            watchedState.data.posts = parsedData.posts;
+            watchedState.form.processState = 'sent';
+          })
+          .catch(error => {
+            watchedState.form.processState = 'error';
+            watchedState.form.processError = errorMessages.network.error;
+            throw error;
+          }
+        );
+      })
+      .catch((e) => {
+        watchedState.form.processState = 'error';
+        console.log(e);
+        console.log(watchedState);
+        console.log('error in validate2!');
+      });
   });
 };
