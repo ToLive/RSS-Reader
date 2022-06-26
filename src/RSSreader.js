@@ -4,7 +4,7 @@ import i18next from 'i18next';
 import axios from 'axios';
 import onChange from 'on-change';
 import resources from './locales/index.js';
-import rssParser from './RSSparser.js'
+import rssParser from './RSSparser.js';
 import view from './View.js';
 
 export default () => {
@@ -43,14 +43,19 @@ export default () => {
     network: {
       error: 'Network Problems. Try again.',
     },
+    feed: {
+      exists: 'RSS already exists',
+    },
   };
 
   const render = view(i18nInstance);
 
-  //console.log(render);
   const watchedState = onChange({
     language: '',
-    data: {},
+    data: {
+      feeds: [],
+      posts: [],
+    },
     form: {
       valid: true,
       processState: 'filling',
@@ -112,28 +117,37 @@ export default () => {
 
         watchedState.form.processState = 'sending';
 
-        console.log(watchedState.form.fields.urlInput);
+        const feedUrl = watchedState.form.fields.urlInput;
+        const newFeedId = Object.keys(watchedState.data.feeds).length + 1;
 
-        axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(watchedState.form.fields.urlInput)}`)
-          .then(response => response.data.contents)
-          .then(str => xmlParser(str, "text/xml"))
-          .then(data => rssParser(data))
-          .then(parsedData => {
+        axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(feedUrl)}`)
+          .then((response) => response.data.contents)
+          .then((str) => xmlParser(str, 'text/xml'))
+          .then((data) => rssParser(data, newFeedId))
+          .then((parsedData) => {
             console.log(parsedData);
-            watchedState.data.channels = parsedData.channel;
-            watchedState.data.posts = parsedData.posts;
+
+            const feedLink = parsedData.feed.link;
+
+            if (watchedState.data.feeds.find((item) => item.link === feedLink)) {
+              throw new Error(errorMessages.feed.exists);
+            }
+
+            watchedState.data.feeds.push(parsedData.feed);
+            watchedState.data.posts = [...watchedState.data.posts, ...parsedData.posts];
             watchedState.form.processState = 'sent';
+            watchedState.form.fields.urlInput = '';
           })
-          .catch(error => {
+          .catch((error) => {
+            console.log(error);
             watchedState.form.processState = 'error';
-            watchedState.form.processError = errorMessages.network.error;
+            watchedState.form.processError = error.message;
             throw error;
-          }
-        );
+          });
       })
-      .catch((e) => {
+      .catch((error) => {
         watchedState.form.processState = 'error';
-        console.log(e);
+        console.log(error);
         console.log(watchedState);
         console.log('error in validate2!');
       });

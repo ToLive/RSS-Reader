@@ -1,47 +1,35 @@
-export default (data) => {
-  const rssChannel = data.querySelector("channel");
+export default (data, feedId) => {
+  const rssFeed = data.querySelector('channel');
 
-  const parsedRss = { channel: { }, items: [] };
-
-  if (!!rssChannel) {
-    parsedRss.channel.title = data.querySelector("title").textContent;
-    parsedRss.channel.link = data.querySelector("link").textContent;
-    parsedRss.channel.description = data.querySelector("title").textContent;
-    parsedRss.channel.guid = generateUUID();
-    
-    const items = data.querySelectorAll("item");
-
-    //console.log(items);
-
-    items.forEach(item => {
-      const parsedItem = { };
-      parsedItem.guid = item.querySelector("guid").textContent;
-      parsedItem.title = item.querySelector("title").textContent;
-      parsedItem.link = item.querySelector("link").textContent;
-      parsedItem.description = item.querySelector("description").textContent;
-      parsedItem.channelGuid = parsedRss.channel.guid;
-
-      parsedRss.items = [ ...parsedRss.items, parsedItem ];
-      //_.set(parsedRss, 'items', parsedItem);
-    });
+  if (!rssFeed) {
+    throw new Error();
   }
 
-  return parsedRss;
-}
+  const parsedRssFeed = {
+    title: data.querySelector('title').textContent,
+    link: data.getElementsByTagName('link')[0].textContent,
+    description: data.querySelector('description').textContent,
+    id: feedId,
+  };
 
-const generateUUID = () => {
-  let
-    d = new Date().getTime(),
-    d2 = (performance && performance.now && (performance.now() * 1000)) || 0;
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-    let r = Math.random() * 16;
-    if (d > 0) {
-      r = (d + r) % 16 | 0;
-      d = Math.floor(d / 16);
-    } else {
-      r = (d2 + r) % 16 | 0;
-      d2 = Math.floor(d2 / 16);
-    }
-    return (c == 'x' ? r : (r & 0x7 | 0x8)).toString(16);
-  });
+  const posts = data.querySelectorAll('item');
+
+  const parsedRssPosts = [...posts].reduce((acc, item) => {
+    const parsedItem = {
+      guid: item.querySelector('guid').textContent,
+      title: item.querySelector('title').textContent,
+      link: item.querySelector('link').textContent,
+      description: item.querySelector('description').textContent,
+      feedId,
+    };
+
+    return [...acc, parsedItem];
+  }, []);
+
+  const parsedRss = {
+    feed: parsedRssFeed,
+    posts: parsedRssPosts,
+  };
+
+  return parsedRss;
 };

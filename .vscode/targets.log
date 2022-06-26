@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Wed May 25 23:22:27 2022
+# Make data base, printed on Sun Jun 26 12:38:44 2022
 
 # Variables
 
@@ -35,7 +35,7 @@ SHELL = /bin/sh
 # environment
 VSCODE_NLS_CONFIG = {"locale":"en","availableLanguages":{}}
 # environment
-_ = /home/tolive/.vscode-server-insiders/bin/27ea5e48aef2a62b76ab170026ade228ded8abdf/node
+_ = /home/tolive/.vscode-server-insiders/bin/fbf1cf3832d43088e27837dbb68d24ab65a098c1/node
 # makefile (from 'Makefile', line 1)
 MAKEFILE_LIST :=  Makefile
 # 'override' directive
@@ -51,15 +51,17 @@ VSCODE_CWD = /mnt/c/Users/seven/AppData/Local/Programs/Microsoft VS Code Insider
 # default
 MAKE_HOST := x86_64-pc-linux-gnu
 # environment
-PATH = /home/tolive/.vscode-server-insiders/bin/27ea5e48aef2a62b76ab170026ade228ded8abdf/bin/remote-cli:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Program Files (x86)/Common Files/Oracle/Java/javapath:/mnt/c/Program Files (x86)/VMware/VMware Workstation/bin/:/mnt/c/Windows/system32:/mnt/c/Windows:/mnt/c/Windows/System32/Wbem:/mnt/c/Windows/System32/WindowsPowerShell/v1.0/:/mnt/c/Windows/System32/OpenSSH/:/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/mnt/c/Program Files/NVIDIA Corporation/NVIDIA NvDLISR:/mnt/c/Program Files/WireGuard/:/mnt/c/Program Files (x86)/NetSarang/Xftp 7/:/mnt/c/Program Files (x86)/NetSarang/Xshell 7/:/mnt/c/Program Files/dotnet/:/mnt/c/Android:/mnt/c/Program Files/Git/cmd:/mnt/c/Program Files/nodejs/:/mnt/c/Program Files/TortoiseHg/:/mnt/c/Program Files/PuTTY/:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Users/seven/AppData/Local/Programs/Python/Python310/Scripts/:/mnt/c/Users/seven/AppData/Local/Programs/Python/Python310/:/mnt/c/Users/seven/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/seven/AppData/Local/Programs/Microsoft VS Code Insiders/bin:/mnt/c/Users/seven/.dotnet/tools:/mnt/c/Users/seven/AppData/Roaming/npm:/snap/bin
+PATH = /home/tolive/.vscode-server-insiders/bin/fbf1cf3832d43088e27837dbb68d24ab65a098c1/bin/remote-cli:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Program Files (x86)/Common Files/Oracle/Java/javapath:/mnt/c/Program Files (x86)/VMware/VMware Workstation/bin/:/mnt/c/Windows/system32:/mnt/c/Windows:/mnt/c/Windows/System32/Wbem:/mnt/c/Windows/System32/WindowsPowerShell/v1.0/:/mnt/c/Windows/System32/OpenSSH/:/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/mnt/c/Program Files/NVIDIA Corporation/NVIDIA NvDLISR:/mnt/c/Program Files/WireGuard/:/mnt/c/Program Files (x86)/NetSarang/Xftp 7/:/mnt/c/Program Files (x86)/NetSarang/Xshell 7/:/mnt/c/Program Files/dotnet/:/mnt/c/Android:/mnt/c/Program Files/Git/cmd:/mnt/c/Program Files/nodejs/:/mnt/c/Program Files/TortoiseHg/:/mnt/c/Program Files/PuTTY/:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Users/seven/AppData/Local/Programs/Python/Python310/Scripts/:/mnt/c/Users/seven/AppData/Local/Programs/Python/Python310/:/mnt/c/Users/seven/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/seven/AppData/Local/Programs/Microsoft VS Code Insiders/bin:/mnt/c/Users/seven/.dotnet/tools:/mnt/c/Users/seven/AppData/Roaming/npm:/snap/bin
 # environment
 XDG_RUNTIME_DIR = /mnt/wslg/runtime-dir
 # environment
 VSCODE_LOG_STACK = false
 # environment
-VSCODE_IPC_HOOK_CLI = /mnt/wslg/runtime-dir/vscode-ipc-df68f798-7577-4ae9-a9de-ac64dd151aae.sock
+ELECTRON_RUN_AS_NODE = 1
 # environment
-VSCODE_SERVER_TAR = /mnt/c/Users/seven/AppData/Local/Temp/vscode-remote-wsl/27ea5e48aef2a62b76ab170026ade228ded8abdf/vscode-server-insider-linux-x64.tar.gz
+VSCODE_IPC_HOOK_CLI = /mnt/wslg/runtime-dir/vscode-ipc-cbc35aa7-0350-42de-bf04-b1b553116e44.sock
+# environment
+VSCODE_SERVER_TAR = /mnt/c/Users/seven/AppData/Local/Temp/vscode-remote-wsl/fbf1cf3832d43088e27837dbb68d24ab65a098c1/vscode-server-insider-linux-x64.tar.gz
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # environment
@@ -159,7 +161,7 @@ WSL_DISTRO_NAME = Ubuntu-20.04
 # environment
 MOTD_SHOWN = update-motd
 # variable set hash-table stats:
-# Load=73/1024=7%, Rehash=0, Collisions=4/98=4%
+# Load=74/1024=7%, Rehash=0, Collisions=4/99=4%
 
 # Pattern-specific Variable Values
 
@@ -260,6 +262,6 @@ install:
 # strcache performance: lookups = 46 / hit rate = 26%
 # hash-table stats:
 # Load=34/8192=0%, Rehash=0, Collisions=1/46=2%
-# Finished Make data base on Wed May 25 23:22:27 2022
+# Finished Make data base on Sun Jun 26 12:38:44 2022
 
  
