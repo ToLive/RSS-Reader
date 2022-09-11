@@ -42,7 +42,6 @@
     "debug": "^4.3.4",
     "eslint": "^8.15.0",
     "eslint-config-airbnb": "^19.0.4",
-    "eslint-plugin-fp": "^2.3.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jest": "^26.1.5",
     "file-loader": "^6.2.0",

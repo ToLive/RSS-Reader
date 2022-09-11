@@ -2,6 +2,7 @@ import _ from 'lodash';
 
 export default (i18nInstance) => {
   console.log('in view');
+
   const renderErrors = (elements, errors, prevErrors) => {
     Object.entries(elements.fields).forEach(([fieldName, fieldElement]) => {
       const error = errors[fieldName];

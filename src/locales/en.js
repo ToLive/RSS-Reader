@@ -25,5 +25,13 @@ export default {
     rss: {
       load_successful: 'RSS load was successful',
     },
+    errorMessages: {
+      network: {
+        general: 'Network Problems. Try again.',
+      },
+      feed: {
+        exists: 'RSS already exists',
+      },
+    },
   },
 };

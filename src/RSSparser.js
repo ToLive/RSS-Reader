@@ -5,6 +5,8 @@ export default (data, feedId) => {
     throw new Error();
   }
 
+  console.log(data);
+
   const parsedRssFeed = {
     title: data.querySelector('title').textContent,
     link: data.getElementsByTagName('link')[0].textContent,

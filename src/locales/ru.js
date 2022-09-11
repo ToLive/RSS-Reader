@@ -25,5 +25,13 @@ export default {
     rss: {
       load_successful: 'RSS успешно загружен',
     },
+    errorMessages: {
+      network: {
+        general: 'Проблема в сети, попробуйте снова.',
+      },
+      feed: {
+        exists: 'RSS уже добавлен',
+      },
+    },
   },
 };

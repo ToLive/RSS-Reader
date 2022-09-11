@@ -10,6 +10,7 @@ import view from './View.js';
 export default () => {
   const defaultLanguage = 'ru';
   const i18nInstance = i18next.createInstance();
+  let feedsAutoUpdateId;
 
   i18nInstance.init({
     lng: defaultLanguage,
@@ -22,8 +23,12 @@ export default () => {
       default: 'yup.field_invalid',
     },
     string: {
-      url: () => ({ key: 'yup.field_not_url' }),
-      required: () => ({ key: 'yup.field_required' }),
+      url: () => ({
+        key: 'yup.field_not_url',
+      }),
+      required: () => ({
+        key: 'yup.field_required',
+      }),
     },
   });
 
@@ -56,6 +61,7 @@ export default () => {
       feeds: [],
       posts: [],
     },
+    autoupdate: false,
     form: {
       valid: true,
       processState: 'filling',
@@ -76,9 +82,11 @@ export default () => {
   };
 
   const validateFields = () => new Promise((resolve, reject) => {
-    schema.validate(watchedState.form.fields, { abortEarly: false })
+    schema.validate(watchedState.form.fields, {
+      abortEarly: false,
+    })
       .then(() => {
-        watchedState.form.errors = { };
+        watchedState.form.errors = {};
         watchedState.form.valid = true;
         resolve('validate was successful!');
       })
@@ -100,6 +108,69 @@ export default () => {
       });
   });
 
+  const updateFeed = (feedUrl, feedId = null) => {
+    axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(feedUrl)}`)
+      .then((response) => response.data.contents)
+      .then((str) => xmlParser(str, 'text/xml'))
+      .then((data) => rssParser(data, feedId ?? Object.keys(watchedState.data.feeds).length + 1))
+      .then((parsedData) => {
+        console.log(parsedData);
+
+        const feedLink = parsedData.feed.link;
+
+        if (feedId === null) {
+          if (watchedState.data.feeds.find((item) => item.link === feedLink)) {
+            watchedState.form.errors = i18nInstance.t(errorMessages.feed.exists);
+            throw new Error();
+          }
+
+          watchedState.data.feeds.push({
+            ...parsedData.feed,
+            sourceUrl: feedUrl,
+          });
+
+          watchedState.autoupdate = true;
+        }
+
+        watchedState.data.posts = watchedState.data.posts.filter((item) => item.feedId !== feedId);
+
+        watchedState.data.posts = [...watchedState.data.posts, ...parsedData.posts];
+        watchedState.form.processState = 'sent';
+        watchedState.form.fields.urlInput = '';
+      })
+      .catch((error) => {
+        console.log(error);
+        watchedState.form.processState = 'error';
+        watchedState.form.fields.urlInput = '';
+        watchedState.form.processError = i18nInstance.t(errorMessages.network.general);
+        throw error;
+      });
+  };
+
+  const feedsAutoUpdate = () => {
+    const {
+      feeds,
+    } = watchedState.data;
+
+    if (feeds.length > 0) {
+      onChange.target(feeds).forEach((feed) => {
+        console.log(feed);
+        updateFeed(feed.sourceUrl, feed.id);
+      });
+    }
+
+    if (feedsAutoUpdateId) {
+      clearTimeout(feedsAutoUpdateId);
+    }
+
+    feedsAutoUpdateId = setTimeout(() => {
+      console.log('autoupdate loop');
+      feedsAutoUpdate();
+    }, 5000);
+  };
+
+  feedsAutoUpdate();
+
   elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
 
@@ -107,7 +178,9 @@ export default () => {
     watchedState.form.processError = null;
 
     Object.entries(elements.fields).forEach(([fieldName, fieldElement]) => {
-      const { value } = fieldElement;
+      const {
+        value,
+      } = fieldElement;
       watchedState.form.fields[fieldName] = value;
     });
 
@@ -118,32 +191,8 @@ export default () => {
         watchedState.form.processState = 'sending';
 
         const feedUrl = watchedState.form.fields.urlInput;
-        const newFeedId = Object.keys(watchedState.data.feeds).length + 1;
 
-        axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(feedUrl)}`)
-          .then((response) => response.data.contents)
-          .then((str) => xmlParser(str, 'text/xml'))
-          .then((data) => rssParser(data, newFeedId))
-          .then((parsedData) => {
-            console.log(parsedData);
-
-            const feedLink = parsedData.feed.link;
-
-            if (watchedState.data.feeds.find((item) => item.link === feedLink)) {
-              throw new Error(errorMessages.feed.exists);
-            }
-
-            watchedState.data.feeds.push(parsedData.feed);
-            watchedState.data.posts = [...watchedState.data.posts, ...parsedData.posts];
-            watchedState.form.processState = 'sent';
-            watchedState.form.fields.urlInput = '';
-          })
-          .catch((error) => {
-            console.log(error);
-            watchedState.form.processState = 'error';
-            watchedState.form.processError = error.message;
-            throw error;
-          });
+        updateFeed(feedUrl);
       })
       .catch((error) => {
         watchedState.form.processState = 'error';
