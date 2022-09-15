@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import _, { reject } from 'lodash';
+import _ from 'lodash';
 import i18next from 'i18next';
 import axios from 'axios';
 import onChange from 'on-change';
@@ -123,7 +123,7 @@ export default () => {
 
           watchedState.form.processState = 'sent';
           watchedState.form.fields.urlInput = '';
-  
+
           watchedState.autoupdate = true;
         }
 
@@ -140,7 +140,8 @@ export default () => {
         console.log(error);
         watchedState.form.processState = 'error';
         watchedState.form.fields.urlInput = '';
-        watchedState.form.processError = error.message ?? i18nInstance.t(errorMessages.network.general);
+        watchedState.form.processError = error.message
+          ?? i18nInstance.t('errorMessages.network.general');
         throw error;
       });
   };
