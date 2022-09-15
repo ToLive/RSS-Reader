@@ -164,10 +164,12 @@ export default (i18nInstance) => {
   const handleProcessState = (elements, processState) => {
     const feedbackElement = document.querySelector('.feedback');
     const { submitButton } = elements;
+    const { urlInput } = elements.fields;
 
     switch (processState) {
       case 'sent':
         submitButton.disabled = false;
+        urlInput.value = '';
 
         feedbackElement.classList.add('text-success');
         feedbackElement.classList.remove('text-danger');

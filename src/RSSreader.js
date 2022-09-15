@@ -122,7 +122,6 @@ export default () => {
           });
 
           watchedState.form.processState = 'sent';
-          watchedState.form.fields.urlInput = '';
 
           watchedState.autoupdate = true;
         }
@@ -139,7 +138,6 @@ export default () => {
       .catch((error) => {
         console.log(error);
         watchedState.form.processState = 'error';
-        watchedState.form.fields.urlInput = '';
         watchedState.form.processError = error.message
           ?? i18nInstance.t('errorMessages.network.general');
         throw error;
