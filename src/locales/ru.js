@@ -30,7 +30,7 @@ export default {
         general: 'Проблема в сети, попробуйте снова.',
       },
       feed: {
-        exists: 'RSS уже добавлен',
+        exists: 'RSS уже существует',
       },
     },
   },

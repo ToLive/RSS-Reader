@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import _ from 'lodash';
+import _, { reject } from 'lodash';
 import i18next from 'i18next';
 import axios from 'axios';
 import onChange from 'on-change';
@@ -14,7 +14,7 @@ export default () => {
 
   i18nInstance.init({
     lng: defaultLanguage,
-    debug: false,
+    debug: true,
     resources,
   });
 
@@ -43,15 +43,6 @@ export default () => {
     },
     submitButton: document.querySelector('button[type="submit"]'),
     postButtons: null,
-  };
-
-  const errorMessages = {
-    network: {
-      error: 'Network Problems. Try again.',
-    },
-    feed: {
-      exists: 'RSS already exists',
-    },
   };
 
   const render = view(i18nInstance);
@@ -122,8 +113,7 @@ export default () => {
 
         if (feedId === null) {
           if (watchedState.data.feeds.find((item) => item.link === feedLink)) {
-            watchedState.form.errors = i18nInstance.t(errorMessages.feed.exists);
-            throw new Error();
+            throw new Error(i18nInstance.t('errorMessages.feed.exists'));
           }
 
           watchedState.data.feeds.push({
@@ -131,6 +121,9 @@ export default () => {
             sourceUrl: feedUrl,
           });
 
+          watchedState.form.processState = 'sent';
+          watchedState.form.fields.urlInput = '';
+  
           watchedState.autoupdate = true;
         }
 
@@ -142,14 +135,12 @@ export default () => {
         elements.postButtons.forEach((item) => item.addEventListener('click', () => {
           watchedState.data.readPosts.push(item.dataset.link);
         }));
-
-        watchedState.form.processState = 'sent';
-        watchedState.form.fields.urlInput = '';
       })
       .catch((error) => {
+        console.log(error);
         watchedState.form.processState = 'error';
         watchedState.form.fields.urlInput = '';
-        watchedState.form.processError = i18nInstance.t(errorMessages.network.general);
+        watchedState.form.processError = error.message ?? i18nInstance.t(errorMessages.network.general);
         throw error;
       });
   };

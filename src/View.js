@@ -4,6 +4,7 @@ export default (i18nInstance) => {
   const renderErrors = (elements, errors, prevErrors) => {
     Object.entries(elements.fields).forEach(([fieldName, fieldElement]) => {
       const error = errors[fieldName];
+      console.log(errors);
 
       const fieldHadError = _.has(prevErrors, fieldName);
       const fieldHasError = _.has(errors, fieldName);
@@ -194,6 +195,7 @@ export default (i18nInstance) => {
   };
 
   const handleProcessError = (error) => {
+    console.log(error);
     const feedbackElement = document.querySelector('.feedback');
 
     feedbackElement.classList.add('text-danger');
