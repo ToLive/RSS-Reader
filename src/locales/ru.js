@@ -27,7 +27,7 @@ export default {
     },
     errorMessages: {
       network: {
-        general: 'Проблема в сети, попробуйте снова.',
+        general: 'Ошибка сети',
       },
       feed: {
         exists: 'RSS уже существует',

@@ -138,7 +138,7 @@ export default () => {
       .catch((error) => {
         console.log(error);
         watchedState.form.processState = 'error';
-        watchedState.form.processError = i18nInstance.t(error.message ?? 'errorMessages.network.general');
+        watchedState.form.processError = i18nInstance.t(error.name === 'AxiosError' ? 'errorMessages.network.general' : error.message);
 
         throw error;
       });
