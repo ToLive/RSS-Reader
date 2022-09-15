@@ -198,7 +198,7 @@ export default () => {
 
         updateFeed(feedUrl, null, watchedState.data.readPosts);
       })
-      .catch((error) => {
+      .catch(() => {
         watchedState.form.processState = 'error';
       });
   });
