@@ -113,7 +113,7 @@ export default () => {
 
         if (feedId === null) {
           if (watchedState.data.feeds.find((item) => item.link === feedLink)) {
-            throw new Error(i18nInstance.t('errorMessages.feed.exists'));
+            throw new Error('errorMessages.feed.exists');
           }
 
           watchedState.data.feeds.push({
@@ -138,8 +138,8 @@ export default () => {
       .catch((error) => {
         console.log(error);
         watchedState.form.processState = 'error';
-        watchedState.form.processError = error.message
-          ?? i18nInstance.t('errorMessages.network.general');
+        watchedState.form.processError = i18nInstance.t(error.message ?? 'errorMessages.network.general');
+
         throw error;
       });
   };

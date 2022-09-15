@@ -2,7 +2,7 @@ export default (data, feedId, readPosts) => {
   const rssFeed = data.querySelector('channel');
 
   if (!rssFeed) {
-    throw new Error();
+    throw new Error('errorMessages.feed.not_valid');
   }
 
   const parsedRssFeed = {

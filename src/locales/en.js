@@ -31,6 +31,7 @@ export default {
       },
       feed: {
         exists: 'RSS already exists',
+        not_valid: 'Not a valid RSS feed',
       },
     },
   },
