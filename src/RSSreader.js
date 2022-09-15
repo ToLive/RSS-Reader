@@ -118,8 +118,6 @@ export default () => {
       .then((str) => xmlParser(str, 'text/xml'))
       .then((data) => rssParser(data, feedId ?? feedsCount + 1, readPosts))
       .then((parsedData) => {
-        console.log(parsedData);
-
         const feedLink = parsedData.feed.link;
 
         if (feedId === null) {
@@ -149,7 +147,6 @@ export default () => {
         watchedState.form.fields.urlInput = '';
       })
       .catch((error) => {
-        console.log(error);
         watchedState.form.processState = 'error';
         watchedState.form.fields.urlInput = '';
         watchedState.form.processError = i18nInstance.t(errorMessages.network.general);
@@ -165,7 +162,6 @@ export default () => {
 
     if (feeds.length > 0) {
       onChange.target(feeds).forEach((feed) => {
-        console.log(feed);
         updateFeed(feed.sourceUrl, feed.id, readPosts);
       });
     }
@@ -175,7 +171,6 @@ export default () => {
     }
 
     feedsAutoUpdateId = setTimeout(() => {
-      console.log('autoupdate loop');
       feedsAutoUpdate();
     }, 5000);
   };
@@ -197,8 +192,6 @@ export default () => {
 
     validateFields()
       .then(() => {
-        console.log('validate was successful!');
-
         watchedState.form.processState = 'sending';
 
         const feedUrl = watchedState.form.fields.urlInput;
@@ -207,9 +200,6 @@ export default () => {
       })
       .catch((error) => {
         watchedState.form.processState = 'error';
-        console.log(error);
-        console.log(watchedState);
-        console.log('error in validate2!');
       });
   });
 };

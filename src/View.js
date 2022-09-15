@@ -78,7 +78,6 @@ export default (i18nInstance) => {
   };
 
   const renderDataPosts = (posts) => {
-    console.log(posts);
     const postsContainer = document.querySelector('.posts');
     postsContainer.innerHTML = '';
 
@@ -167,7 +166,6 @@ export default (i18nInstance) => {
 
     switch (processState) {
       case 'sent':
-        console.log('Process requestsent');
         submitButton.disabled = false;
 
         feedbackElement.classList.add('text-success');
