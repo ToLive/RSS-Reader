@@ -42,6 +42,7 @@ export default () => {
       urlInput: document.getElementById('url-input'),
     },
     submitButton: document.querySelector('button[type="submit"]'),
+    postButtons: null,
   };
 
   const errorMessages = {
@@ -60,6 +61,7 @@ export default () => {
     data: {
       feeds: [],
       posts: [],
+      readPosts: [],
     },
     autoupdate: false,
     form: {
@@ -108,11 +110,13 @@ export default () => {
       });
   });
 
-  const updateFeed = (feedUrl, feedId = null) => {
+  const updateFeed = (feedUrl, feedId = null, readPosts = []) => {
+    const feedsCount = Object.keys(watchedState.data.feeds).length;
+
     axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(feedUrl)}`)
       .then((response) => response.data.contents)
       .then((str) => xmlParser(str, 'text/xml'))
-      .then((data) => rssParser(data, feedId ?? Object.keys(watchedState.data.feeds).length + 1))
+      .then((data) => rssParser(data, feedId ?? feedsCount + 1, readPosts))
       .then((parsedData) => {
         console.log(parsedData);
 
@@ -135,6 +139,12 @@ export default () => {
         watchedState.data.posts = watchedState.data.posts.filter((item) => item.feedId !== feedId);
 
         watchedState.data.posts = [...watchedState.data.posts, ...parsedData.posts];
+
+        elements.postButtons = document.querySelectorAll('.list-group-item > button[type="button"]');
+        elements.postButtons.forEach((item) => item.addEventListener('click', () => {
+          watchedState.data.readPosts.push(item.dataset.link);
+        }));
+
         watchedState.form.processState = 'sent';
         watchedState.form.fields.urlInput = '';
       })
@@ -150,12 +160,13 @@ export default () => {
   const feedsAutoUpdate = () => {
     const {
       feeds,
+      readPosts,
     } = watchedState.data;
 
     if (feeds.length > 0) {
       onChange.target(feeds).forEach((feed) => {
         console.log(feed);
-        updateFeed(feed.sourceUrl, feed.id);
+        updateFeed(feed.sourceUrl, feed.id, readPosts);
       });
     }
 
@@ -192,7 +203,7 @@ export default () => {
 
         const feedUrl = watchedState.form.fields.urlInput;
 
-        updateFeed(feedUrl);
+        updateFeed(feedUrl, null, watchedState.data.readPosts);
       })
       .catch((error) => {
         watchedState.form.processState = 'error';

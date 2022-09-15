@@ -1,8 +1,6 @@
 import _ from 'lodash';
 
 export default (i18nInstance) => {
-  console.log('in view');
-
   const renderErrors = (elements, errors, prevErrors) => {
     Object.entries(elements.fields).forEach(([fieldName, fieldElement]) => {
       const error = errors[fieldName];
@@ -103,8 +101,16 @@ export default (i18nInstance) => {
 
       const liHref = document.createElement('a');
       liHref.href = item.link;
-      liHref.classList.add('fw-bold');
-      liHref.dataset.id = 2;
+
+      if (!item.wasRead) {
+        liHref.classList.add('fw-bold');
+      }
+
+      if (item.wasRead) {
+        liHref.classList.remove('fw-bold');
+        liHref.classList.add('fw-normal', 'link-secondary');
+      }
+
       liHref.target = '_blank';
       liHref.rel = 'noopener noreferrer';
       liHref.innerText = item.title;
@@ -112,10 +118,24 @@ export default (i18nInstance) => {
       const liButton = document.createElement('button');
       liButton.type = 'button';
       liButton.classList.add('btn', 'btn-outline-primary', 'btn-sm');
-      liButton.dataset.id = 2;
       liButton.dataset.bsToggle = 'modal';
       liButton.dataset.bsTarget = '#modal';
+      liButton.dataset.link = item.link;
       liButton.innerText = 'Просмотр';
+
+      liButton.addEventListener('click', () => {
+        const modalTitle = document.querySelector('.modal-title');
+        modalTitle.innerHTML = item.title;
+
+        const modalBody = document.querySelector('.modal-body');
+        modalBody.innerHTML = item.description;
+
+        const modalHref = document.querySelector('.full-article');
+        modalHref.href = item.link;
+
+        liHref.classList.remove('fw-bold');
+        liHref.classList.add('fw-normal', 'link-secondary');
+      });
 
       postLi.appendChild(liHref);
       postLi.appendChild(liButton);
@@ -184,7 +204,6 @@ export default (i18nInstance) => {
   };
 
   const render = (elements) => (path, value, prevValue) => {
-    console.log('in render!');
     switch (path) {
       case 'language':
         i18nInstance.changeLanguage(value).then(() => handleLanguageChange());

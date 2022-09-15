@@ -1,4 +1,4 @@
-export default (data, feedId) => {
+export default (data, feedId, readPosts) => {
   const rssFeed = data.querySelector('channel');
 
   if (!rssFeed) {
@@ -23,6 +23,7 @@ export default (data, feedId) => {
       link: item.querySelector('link').textContent,
       description: item.querySelector('description').textContent,
       feedId,
+      wasRead: readPosts.includes(item.querySelector('link').textContent),
     };
 
     return [...acc, parsedItem];
