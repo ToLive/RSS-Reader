@@ -42,13 +42,14 @@ export default () => {
       urlInput: document.getElementById('url-input'),
     },
     submitButton: document.querySelector('button[type="submit"]'),
+    langSelector: document.querySelectorAll('[data-lang]'),
     postButtons: null,
   };
 
   const render = view(i18nInstance);
 
   const watchedState = onChange({
-    language: '',
+    language: 'ru',
     data: {
       feeds: [],
       posts: [],
@@ -136,7 +137,6 @@ export default () => {
         }));
       })
       .catch((error) => {
-        console.log(error);
         watchedState.form.processState = 'error';
         watchedState.form.processError = i18nInstance.t(error.name === 'AxiosError' ? 'errorMessages.network.general' : error.message);
 
@@ -192,4 +192,10 @@ export default () => {
         watchedState.form.processState = 'error';
       });
   });
+
+  elements.langSelector.forEach((item) => item.addEventListener('click', (e) => {
+    const { lang } = e.target.dataset;
+
+    watchedState.language = lang;
+  }));
 };
