@@ -8,13 +8,14 @@ import rssParser from './RSSparser.js';
 import view from './View.js';
 
 export default () => {
-  const defaultLanguage = 'ru';
+  const savedLang = localStorage.getItem('rss-lang') || 'ru';
+
   const i18nInstance = i18next.createInstance();
   let feedsAutoUpdateId;
 
   i18nInstance.init({
-    lng: defaultLanguage,
-    debug: true,
+    lng: savedLang,
+    debug: false,
     resources,
   });
 
@@ -67,7 +68,7 @@ export default () => {
     },
   }, render(elements));
 
-  watchedState.language = defaultLanguage;
+  watchedState.language = savedLang;
 
   const xmlParser = (xmlDocument, type) => {
     const domParser = new DOMParser();
@@ -195,6 +196,8 @@ export default () => {
 
   elements.langSelector.forEach((item) => item.addEventListener('click', (e) => {
     const { lang } = e.target.dataset;
+
+    localStorage.setItem('rss-lang', lang);
 
     watchedState.language = lang;
   }));
