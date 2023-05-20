@@ -152,7 +152,8 @@ export default (i18nInstance) => {
     postsContainer.appendChild(postsCard);
   };
 
-  const handleLanguageChange = () => {
+  const handleLanguageChange = (value) => {
+    document.querySelector('#lang-dropdown').textContent = i18nInstance.t(`languages.${value}`);
     document.querySelector('.lead').textContent = i18nInstance.t('labels.subtitle');
     document.querySelector('h1').textContent = i18nInstance.t('labels.title');
     document.querySelector('[type="submit"]').textContent = i18nInstance.t('buttons.submit');
@@ -208,7 +209,7 @@ export default (i18nInstance) => {
   const render = (elements) => (path, value, prevValue) => {
     switch (path) {
       case 'language':
-        i18nInstance.changeLanguage(value).then(() => handleLanguageChange());
+        i18nInstance.changeLanguage(value).then(() => handleLanguageChange(value));
         break;
 
       case 'data.feeds':

@@ -1,8 +1,8 @@
 export default {
   translation: {
     languages: {
-      en: 'English',
-      ru: 'Русский',
+      en: 'EN',
+      ru: 'RU',
     },
     labels: {
       title: 'RSS aggregator',

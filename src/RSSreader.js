@@ -50,7 +50,7 @@ export default () => {
   const render = view(i18nInstance);
 
   const watchedState = onChange({
-    language: 'ru',
+    language: '',
     data: {
       feeds: [],
       posts: [],
