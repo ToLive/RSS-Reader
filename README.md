@@ -8,6 +8,7 @@ Read any rss feed with ease!
 #####Features
 - Autoupdate
 - Post preview
+- i18n
 
 Demo: [https://frontend-project-lvl3-snowy-one.vercel.app/](https://frontend-project-lvl3-tolive.vercel.app/)
 
